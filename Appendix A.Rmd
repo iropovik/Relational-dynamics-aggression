@@ -1,0 +1,37 @@
+
+---
+title: "Appendix A for: Relational dynamics in bullying, victimization, and defending perceptions"
+output: pdf_document
+---
+
+# The description of the estimation procedure
+
+Appendix A describes the estimation procedure in detail. Conceptually, the process entailed a structured and sequential approach to model estimation, aiming to refine the algorithm parameters progressively for improved convergence and reliability of the results. We used values of 0.25 for model's overall convergence t-ratio, 0.10 for individual convergence t-ratios, and a threshold of 7 for non-basic rate parameter effects as criteria for adequate convergence. The estimation procedure employed an adaptive approach. Each model type was given up to six runs to reach convergence. If the convergence of the model was not satisfactory in the given run, we engaged in further estimation runs. Prior to the analysis, we conducted pilot convergence checks to screen out classrooms where the proportion of missing data was too large to provide for an admissible solution for a given model. This analytic workflow ensured a detailed exploration of the parameter space for each model. 
+
+The specific details of the estimation runs were as follows:
+
+## Model Estimation Runs
+
+### First Attempt
+
+For the initial estimation run, the model was run with the original settings of the Siena algorithm (firstg = .05, iterN2 = 500, iterN3 = 5000). This setup was designed to establish a baseline for the model's behavior with the given data and effects.
+
+### Intermediate Runs (Second to Fourth Attempts)
+
+The subsequent three estimation attempts leveraged the results of the previous run. This iterative strategy was employed to enhance the stability of the model by providing it with the prior run's parameter estimates as a starting values for this next run.
+
+### Fifth Attempt
+
+The fifth estimation run involved a significant shift in the algorithm's parameters. A new Siena algorithm was created with a firstg parameter set to 0.01, reflecting a more conservative step size in the parameter updates in the iterative algorithm.
+
+### Sixth Attempt
+
+In the sixth and final estimation attempt, another adjustment to the algorithm was made. The firstg parameter was further reduced to 0.005, and the number of iterations for phases n2 and n3 were increased to 2000 and 10000, respectively. This was the most conservative approach in the estimation sequence, aiming to ensure convergence even for models that proved to be challenging in the earlier runs.
+
+## Skip Logic Application
+
+Skip logic was applied throughout the estimation process. If the first run did not converge, and the model was deemed unlikely to converge (e.g., model yielding excessively large estimates or SEs) in subsequent runs without adjustment to parameters or model specifications, the script skipped next three iterations (i.e. re-estimations based on previous run's estimates). This was based on a predefined skip logic that aimed to optimize computational efforts.
+
+## Convergence Checking
+
+After each run, checks for convergence and the reasonableness of the estimates were carried out. If the automated checks revealed issues, the model was re-estimated, the estimation was adjusted, or, depending on the specific conditions, skipped according to the skip logic.

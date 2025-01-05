@@ -1,12 +1,15 @@
-
 ---
-title: "Appendix A for: Relational dynamics in bullying, victimization, and defending perceptions"
-output: pdf_document
+title: 'Appendix A for: How Affective Relationships and Classroom Norms Shape Perceptions
+  of Aggressor, Victim, and Defender Roles'
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 # The description of the estimation procedure
 
-Appendix A describes the estimation procedure in detail. Conceptually, the process entailed a structured and sequential approach to model estimation, aiming to refine the algorithm parameters progressively for improved convergence and reliability of the results. We used values of 0.25 for model's overall convergence t-ratio, 0.10 for individual convergence t-ratios, and a threshold of 7 for non-basic rate parameter effects as criteria for adequate convergence. The estimation procedure employed an adaptive approach. Each model type was given up to six runs to reach convergence. If the convergence of the model was not satisfactory in the given run, we engaged in further estimation runs. Prior to the analysis, we conducted pilot convergence checks to screen out classrooms where the proportion of missing data was too large to provide for an admissible solution for a given model. This analytic workflow ensured a detailed exploration of the parameter space for each model. 
+Appendix A describes the estimation procedure in detail. Conceptually, the process entailed a structured and sequential approach to model estimation, aiming to refine the algorithm parameters progressively for improved convergence and reliability of the results. We used values of 0.25 for model's overall convergence t-ratio, 0.10 for individual convergence t-ratios, and a threshold of 7 for non-basic rate parameter effects as criteria for adequate convergence. The estimation procedure employed an adaptive approach. Each model type was given up to six runs to reach convergence. If the convergence of the model was not satisfactory in the given run, we engaged in further estimation runs. Prior to the analysis, we conducted pilot convergence checks to screen out classrooms where the proportion of missing data was too large to provide for an admissible solution for a given model. This analytic workflow ensured a detailed exploration of the parameter space for each model.
 
 The specific details of the estimation runs were as follows:
 

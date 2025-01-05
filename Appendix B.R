@@ -1,5 +1,5 @@
 #' ---
-#' title: "Appendix B for: Relational dynamics in bullying, victimization, and defending perceptions"
+#' title: "Appendix B for: How Affective Relationships and Classroom Norms Shape Perceptions of Aggressor, Victim, and Defender Roles"
 #' author: ""
 #' date: "`r Sys.Date()`"
 #' output:

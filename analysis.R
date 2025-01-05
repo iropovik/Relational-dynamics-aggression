@@ -30,11 +30,11 @@ startTime <- Sys.time()
 # load("resultsObjects.RData")
 
 # Test run involving only n = nClassBeta classes
-betaTesting <- TRUE
-nClassBeta <- 1
+betaTesting <- FALSE
+nClassBeta <- 3
 
 # Should Healthy Context paradox be modeled?
-healthyContext <- TRUE
+healthyContext <- FALSE
 
 # Define moderators for the meta-regression analysis
 if(healthyContext == TRUE){
@@ -62,7 +62,7 @@ n.clus <- detectCores() - 1
 
 # Setting for the verbose and batch arguments
 verboseOn <- FALSE
-batchOn <- FALSE
+batchOn <- TRUE
 
 # Number of iterations and firstg parameter setting
 if(healthyContext == TRUE){
@@ -79,7 +79,7 @@ if(healthyContext == TRUE){
 estimateThreshold <-  50 # Defaults to 20, set to Inf to turn off estimate check
 
 # What is the maximum number of attempts in estimating the Siena model (if there are convergence issues)?
-maxAttempt <- 10 # Should take values 5 to 6 if skippingLogic == TRUE. Set to 6 for maximum no of attempts including 2 "overkill" models. Set 4 to not estimate the "overkill" models. Set to 5 for a more optimal tradeoff between convergence and computation time.
+maxAttempt <- 12 # Should take values 5 to 6 if skippingLogic == TRUE. Set to 6 for maximum no of attempts including 2 "overkill" models. Set 4 to not estimate the "overkill" models. Set to 5 for a more optimal tradeoff between convergence and computation time.
 
 # Skipping logic
 skippingLogic <- FALSE # Set to FALSE for HCP paper.
@@ -404,7 +404,6 @@ for (i in 1:nrow(modelCombinations)) {
   defenderDep <- sienaDependent(array(c(d[["defender1"]], d[["defender2"]]), dim = c(nrow(d[["defender1"]]), ncol(d[["defender1"]]), 2)))
   detachment <- sienaDependent(as.matrix(d[["att"]][,c("detachmentT1", "detachmentT2")]) - mean(as.matrix(d[["att"]][,c("detachmentT1", "detachmentT2")]), na.rm = TRUE), type = "continuous")
   gender <- coCovar(d[["att"]]$gender)
-  exclDepTwk <- coCovar(d[["att"]]$exclDepTwk)
   if(healthyContext == TRUE){
     victimVictim <- coDyadCovar(d[["victim_victim"]])
     defenderVictim <- coDyadCovar(d[["defender_victim"]])
@@ -417,9 +416,9 @@ for (i in 1:nrow(modelCombinations)) {
   # Create the RSiena data object based on the model type
   if(healthyContext == TRUE){
     (if (modelType == "reduced") {
-      sienaDat <- sienaDataCreate(friendDep, exclDep, victimDep, gender, detachment, vict, victimVictim, exclDepTwk)
+      sienaDat <- sienaDataCreate(friendDep, exclDep, victimDep, gender, detachment, vict, victimVictim)
     } else if (modelType == "full") {
-      sienaDat <- sienaDataCreate(friendDep, exclDep, victimDep, bullyDep, defenderDep, gender, detachment, vict, bul, def, victimVictim, defenderVictim, bullyVictim, exclDepTwk)
+      sienaDat <- sienaDataCreate(friendDep, exclDep, victimDep, bullyDep, defenderDep, gender, detachment, vict, bul, def, victimVictim, defenderVictim, bullyVictim)
     })
   } else {
     if (modelType == "baseline") {
@@ -465,8 +464,7 @@ if(healthyContext == TRUE){
     
     effects <- includeEffects(effects, name = "detachment", recipDeg, interaction1 = "friendDep")
     effects <- includeEffects(effects, name = "detachment", effFrom, interaction1 = "vict")
-    
-    effects <- includeEffects(effects, name = "detachment", effFrom, interaction1 = "exclDepTwk")
+   
     return(effects)
   }
   
@@ -497,8 +495,8 @@ if(healthyContext == TRUE){
     effects <- includeEffects(effects, name = "exclDep", altX, interaction1 = "bul")
     
     effects <- includeEffects(effects, name = "friendDep",X, interaction1 = "victimVictim", include = TRUE)
-    effects <- includeEffects(effects, name = "friendDep",X, interaction1 = "defenderVictim", include = TRUE)
-    effects <- includeEffects(effects, name = "friendDep",X, interaction1 = "bullyVictim", include = TRUE)
+    effects <- includeEffects(effects, name = "friendDep",X, interaction1 = "defender_victim", include = TRUE)
+    effects <- includeEffects(effects, name = "friendDep",X, interaction1 = "bully_victim", include = TRUE)
     
     effects <- includeEffects(effects, name = "exclDep",X, interaction1 = "victimVictim", include = TRUE)
     effects <- includeEffects(effects, name = "exclDep",X, interaction1 = "defenderVictim", include = TRUE)
@@ -506,7 +504,6 @@ if(healthyContext == TRUE){
     
     effects <- includeEffects(effects, name = "detachment", recipDeg, interaction1 = "friendDep")
     effects <- includeEffects(effects, name = "detachment", effFrom, interaction1 = "vict")
-    effects <- includeEffects(effects, name = "detachment", effFrom, interaction1 = "exclDepTwk")
     return(effects)
   } 
 } else {
@@ -868,8 +865,8 @@ resultTableReduced <- resultTable[reducedNames]
 resultTableFull <- resultTable[fullNames]
 
 # Define a function to run the meta-analysis on each effect
-runMetaAnalysis <- function(df, method = "ML", slab = df$class) {
-  rmaObject <- rma(yi = df$estMeans, sei = df$se, data = df, method = method, slab = slab, control=list(maxiter=5000))
+runMetaAnalysis <- function(df, method = "REML", slab = df$class) {
+  rmaObject <- rma(yi = df$estMeans, sei = df$se, data = df, method = method, slab = slab)
   return(rmaObject)
 }
 
